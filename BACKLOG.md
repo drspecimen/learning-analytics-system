@@ -1,10 +1,10 @@
 # Project Backlog — AI-Driven Learning Analytics System
 
 ## Sprint 1: Requirements Analysis
-- [ ] Finalize functional requirements (Table 3.1)
-- [ ] Finalize non-functional requirements (Table 3.2)
-- [ ] Define Administrator role permissions
-- [ ] Define Lecturer role permissions
+- [x] Finalize functional requirements (Table 3.1)
+- [x] Finalize non-functional requirements (Table 3.2)
+- [x] Define Administrator role permissions
+- [x] Define Lecturer role permissions
 
 ## Sprint 2: Database Design
 - [ ] Design ERD schema (Figure 3.3)

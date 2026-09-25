@@ -8,6 +8,7 @@ data/processed/training_dataset.csv for model training (Figure 3.5).
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import LabelEncoder, StandardScaler
+import joblib
 import os
 
 RAW_DIR = "data/raw"
@@ -99,6 +100,11 @@ def encode_categoricals(df):
     target_le = LabelEncoder()
     df["final_result"] = target_le.fit_transform(df["final_result"].astype(str))
     encoders["final_result"] = target_le
+
+    os.makedirs(PROCESSED_DIR, exist_ok=True)
+    joblib.dump(target_le, f"{PROCESSED_DIR}/target_encoder.pkl")
+    print(f"Saved target label encoder to {PROCESSED_DIR}/target_encoder.pkl")
+    print(f"Label mapping: {dict(zip(target_le.classes_, target_le.transform(target_le.classes_)))}")
 
     return df, encoders
 

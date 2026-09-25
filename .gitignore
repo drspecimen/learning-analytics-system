@@ -5,3 +5,4 @@ __pycache__/
 *.db
 data/raw/
 data/processed/
+ml/trained_models/

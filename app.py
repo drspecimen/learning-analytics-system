@@ -30,7 +30,7 @@ from presentation import admin_pages, pages, theme                              
 
 theme.apply()
 db.init_db()
-IDLE_TIMEOUT_MIN = int(os.environ.get("IDLE_TIMEOUT_MINUTES", "60"))
+IDLE_TIMEOUT_MIN = int(os.environ.get("IDLE_TIMEOUT_MINUTES", "30"))
 
 ADMIN_PAGES = {
     "Overview": ("📊", pages.overview),

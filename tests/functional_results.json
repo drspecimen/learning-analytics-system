@@ -1,0 +1,182 @@
+[
+  {
+    "id": "TC-01",
+    "fr": "FR1",
+    "condition": "Valid lecturer email and password",
+    "expected": "Lecturer pages open; administrator pages hidden",
+    "actual": "Signed in; menu = Overview, My Courses, My Students, Early Warning, Student Profile, Communications, Reports, My Account",
+    "status": "Pass",
+    "seconds": 1.01
+  },
+  {
+    "id": "TC-02",
+    "fr": "FR1",
+    "condition": "Wrong password",
+    "expected": "Error shown; no session; attempt logged",
+    "actual": "Error: 'Incorrect email or password.'; session user = None; logged = True",
+    "status": "Pass",
+    "seconds": 0.44
+  },
+  {
+    "id": "TC-03",
+    "fr": "FR1/NFR2",
+    "condition": "Five wrong passwords in 15 minutes",
+    "expected": "Account locked with message",
+    "actual": "Correct password refused: 'Too many failed attempts. Try again in 15 minutes, or ask your administrator to reset your password.'",
+    "status": "Pass",
+    "seconds": 0.22
+  },
+  {
+    "id": "TC-04",
+    "fr": "FR2",
+    "condition": "Administrator adds a lecturer with an email outside the staff domain",
+    "expected": "Account refused",
+    "actual": "Refused: 'Staff emails for your institution must end with: alpha.edu.ng'",
+    "status": "Pass",
+    "seconds": 0.0
+  },
+  {
+    "id": "TC-05",
+    "fr": "FR2",
+    "condition": "Administrator deletes a lecturer who has courses",
+    "expected": "Account removed; courses unassigned",
+    "actual": "User exists = False; course lecturer = None",
+    "status": "Pass",
+    "seconds": 0.03
+  },
+  {
+    "id": "TC-06",
+    "fr": "FR3",
+    "condition": "Assign then unassign a course from a lecturer",
+    "expected": "Lecturer sees the course, then no longer sees it",
+    "actual": "Courses before = 2, after = 1",
+    "status": "Pass",
+    "seconds": 0.09
+  },
+  {
+    "id": "TC-07",
+    "fr": "FR4",
+    "condition": "CSV with a required column missing",
+    "expected": "File rejected; missing column named",
+    "actual": "Errors: ['Missing required columns: avg_score']",
+    "status": "Pass",
+    "seconds": 0.01
+  },
+  {
+    "id": "TC-08",
+    "fr": "FR4",
+    "condition": "CSV with avg_score of 150 and an invalid final_result",
+    "expected": "File rejected; both problems listed",
+    "actual": "2 errors: ['final_result must be Distinction, Pass, Fail, Withdrawn or blank. Found: Excellent', 'avg_score must be between 0 and 100.']",
+    "status": "Pass",
+    "seconds": 0.01
+  },
+  {
+    "id": "TC-09",
+    "fr": "FR4",
+    "condition": "Matric numbers that do not fit the institution's format",
+    "expected": "File rejected with examples",
+    "actual": "Errors: [\"1 matric number(s) do not match your institution's format 'ALP#########', e.g. WRONG/123. Fix the file or update the format under Settings.\"]",
+    "status": "Pass",
+    "seconds": 0.02
+  },
+  {
+    "id": "TC-10",
+    "fr": "FR5",
+    "condition": "Reset and load a valid institution file (600 rows)",
+    "expected": "Data imported, three models trained, current students scored",
+    "actual": "Imported 600 enrollments; best = Decision Tree; scored 200",
+    "status": "Pass",
+    "seconds": 4.38
+  },
+  {
+    "id": "TC-11",
+    "fr": "NFR1",
+    "condition": "Score 1,000 enrollments",
+    "expected": "Predictions returned within 5 seconds",
+    "actual": "1,000 predictions with explanations in 0.05 s",
+    "status": "Pass",
+    "seconds": 0.35
+  },
+  {
+    "id": "TC-12",
+    "fr": "FR7",
+    "condition": "Open a high-risk student",
+    "expected": "Top three contributing factors shown",
+    "actual": "3 factors, e.g. 'Low clicks vs course average (0.85x vs typical 1.16x)'",
+    "status": "Pass",
+    "seconds": 0.21
+  },
+  {
+    "id": "TC-13",
+    "fr": "FR8",
+    "condition": "Early warning list",
+    "expected": "Only High and Medium risk enrollments listed, highest first",
+    "actual": "836 rows; levels = ['High', 'Medium']; sorted = True",
+    "status": "Pass",
+    "seconds": 0.93
+  },
+  {
+    "id": "TC-14",
+    "fr": "FR9",
+    "condition": "Export the high-risk report",
+    "expected": "CSV rows equal the number of high-risk enrollments",
+    "actual": "Dashboard count 589; exported rows 589",
+    "status": "Pass",
+    "seconds": 0.21
+  },
+  {
+    "id": "TC-15",
+    "fr": "FR10",
+    "condition": "Administrator retrains at week 8",
+    "expected": "Three models compared; best saved; earlier versions kept (max 3)",
+    "actual": "Models compared = ['Logistic Regression', 'Decision Tree', 'Random Forest']; stored versions = 3",
+    "status": "Pass",
+    "seconds": 16.55
+  },
+  {
+    "id": "TC-16",
+    "fr": "FR12/NFR7",
+    "condition": "Check the audit log after the actions above",
+    "expected": "Sign-ins, imports, training and predictions recorded",
+    "actual": "Missing actions: none",
+    "status": "Pass",
+    "seconds": 0.0
+  },
+  {
+    "id": "TC-17",
+    "fr": "FR13",
+    "condition": "Send a message to a student",
+    "expected": "Message stored with status; visible in history",
+    "actual": "Status = Recorded; history rows = 1",
+    "status": "Pass",
+    "seconds": 0.21
+  },
+  {
+    "id": "TC-18",
+    "fr": "NFR2",
+    "condition": "Institution A requests a student who belongs to institution B",
+    "expected": "Nothing returned",
+    "actual": "Result = None",
+    "status": "Pass",
+    "seconds": 0.14
+  },
+  {
+    "id": "TC-19",
+    "fr": "NFR2",
+    "condition": "Session idle for longer than the timeout",
+    "expected": "User signed out on next action",
+    "actual": "Message: 'You were signed out after a period of inactivity.'",
+    "status": "Pass",
+    "seconds": 0.93
+  },
+  {
+    "id": "TC-20",
+    "fr": "NFR4",
+    "condition": "Every page opened by each role on demo data",
+    "expected": "No page raises an error",
+    "actual": "Pages with errors: none",
+    "status": "Pass",
+    "seconds": 4.3
+  }
+]

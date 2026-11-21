@@ -49,7 +49,7 @@ h1, h2, h3, h4 {{ color: {INK}; letter-spacing: -0.01em; }}
     padding: 14px 16px; box-shadow: 0 1px 2px rgba(16,24,40,0.04);
 }}
 [data-testid="stMetricLabel"] p {{ color: {INK_2} !important; font-weight: 500; font-size: 0.85rem; }}
-[data-testid="stMetricValue"] {{ color: {INK}; font-weight: 700; }}
+[data-testid="stMetricValue"] {{ color: {INK}; font-weight: 700; font-size: 1.65rem; }}
 .las-header {{
     background: linear-gradient(120deg, #0f1f38 0%, {BRAND} 100%);
     color: white; border-radius: 14px; padding: 20px 24px; margin-bottom: 18px;

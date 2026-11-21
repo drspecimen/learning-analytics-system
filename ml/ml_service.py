@@ -41,10 +41,16 @@ def get_report(iid):
     return json.loads(meta["report"])
 
 
+# Alert threshold chosen in the evaluation (Chapter Five): the highest threshold that keeps
+# cross-validated at-risk recall at or above 0.75. Medium band starts at 0.30.
+HIGH_THRESHOLD = 0.55
+MEDIUM_THRESHOLD = 0.30
+
+
 def risk_level(score):
-    if score >= 0.6:
+    if score >= HIGH_THRESHOLD:
         return "High"
-    if score >= 0.35:
+    if score >= MEDIUM_THRESHOLD:
         return "Medium"
     return "Low"
 

@@ -90,6 +90,7 @@ def generate(iid, n_students=400, seed=42, verbose=True, progress=None):
     inst = db.get_institution(iid)
     code = inst["code"]
     fmt, tpl, used = inst.get("matric_format"), inst.get("student_email_format"), set()
+    id_rng = np.random.default_rng(seed + 1)   # separate stream: ID formats never change the simulated data
 
     step(0.05, "Creating demo lecturers and courses")
     lecturer_ids = {}
@@ -134,7 +135,7 @@ def generate(iid, n_students=400, seed=42, verbose=True, progress=None):
         matric = f"{code}/{dept[:3].upper()}/{24 if i % 2 else 25}/{1000 + i}"
         if fmt:   # follow the institution's own matric format
             for _ in range(50):
-                matric = formats.example_from_pattern(fmt, rng)
+                matric = formats.example_from_pattern(fmt, id_rng)
                 if matric not in used:
                     break
         used.add(matric)

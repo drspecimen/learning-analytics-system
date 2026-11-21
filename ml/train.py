@@ -25,7 +25,7 @@ from sklearn.inspection import permutation_importance
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (accuracy_score, confusion_matrix, f1_score, precision_score,
                              recall_score, roc_auc_score, roc_curve)
-from sklearn.model_selection import GridSearchCV, StratifiedKFold, train_test_split
+from sklearn.model_selection import GridSearchCV, StratifiedGroupKFold
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.tree import DecisionTreeClassifier
@@ -47,7 +47,8 @@ def load_training_frame(iid, cutoff_week=DEFAULT_CUTOFF):
     if base.empty:
         raise ValueError("No past students with a final_result were found. Upload completed history first.")
     ids = base["enrollment_id"].tolist()
-    return build_features(base, db.get_activity_df(iid, ids), db.get_grades_df(iid, ids), cutoff_week)
+    feats = build_features(base, db.get_activity_df(iid, ids), db.get_grades_df(iid, ids), cutoff_week)
+    return feats.sort_values("enrollment_id").reset_index(drop=True)   # fixed order -> reproducible splits
 
 
 def readiness(results):
@@ -135,16 +136,21 @@ def train(iid, cutoff_week=DEFAULT_CUTOFF, verbose=True, user_id=None, progress=
     labels = [l for l in LABELS if l in set(y)]
     log(f"Training rows: {len(df)} | class balance: {y.value_counts().to_dict()}")
 
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=42, stratify=y)
-    cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
+    # Split by STUDENT, not by row: a student's enrollments never appear in both the
+    # training and the test set (one fold of a stratified group 5-fold = about 20%).
+    groups = df["student_id"].values
+    outer = StratifiedGroupKFold(n_splits=5, shuffle=True, random_state=42)
+    train_idx, test_idx = next(outer.split(X, y, groups))
+    X_train, X_test, y_train, y_test = X.iloc[train_idx], X.iloc[test_idx], y.iloc[train_idx], y.iloc[test_idx]
+    g_train = groups[train_idx]
+    cv = StratifiedGroupKFold(n_splits=5, shuffle=True, random_state=42)
 
     results, fitted = {}, {}
     for k, (name, (estimator, params)) in enumerate(model_grid().items()):
         log(f"  Tuning {name}...")
         step(0.15 + 0.25 * k, f"Training and tuning {name}")
         search = GridSearchCV(estimator, params, cv=cv, scoring="f1_weighted", n_jobs=-1)
-        search.fit(X_train, y_train)
+        search.fit(X_train, y_train, groups=g_train)
         fitted[name] = search.best_estimator_
         metrics = evaluate(search.best_estimator_, X_test, y_test, labels)
         metrics["best_params"] = {k.replace("clf__", ""): v for k, v in search.best_params_.items()}

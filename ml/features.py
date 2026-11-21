@@ -11,8 +11,10 @@ This is what makes the predictions an EARLY warning instead of a post-mortem.
 import numpy as np
 import pandas as pd
 
+# Sensitive attributes (gender, age band, disability) and entry qualification are NOT model inputs.
+# They are still computed below so the fairness audit can compare error rates across groups.
 FEATURES = [
-    "prev_attempts", "is_male", "has_disability", "age_rank", "education_rank",
+    "prev_attempts",
     "total_logins", "total_clicks", "active_weeks", "minutes_per_week",
     "resources_viewed", "forum_posts", "videos_watched",
     "engagement_trend", "weeks_since_active", "clicks_vs_course",

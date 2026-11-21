@@ -95,15 +95,15 @@ def engagement_scatter(view, title="Engagement vs performance"):
 
 
 def gauge(value, title="Risk score"):
-    lvl = "High" if value >= 0.6 else "Medium" if value >= 0.35 else "Low"
+    lvl = "High" if value >= 0.55 else "Medium" if value >= 0.30 else "Low"
     fig = go.Figure(go.Indicator(
         mode="gauge+number", value=value * 100, number={"suffix": "%", "font": {"size": 34, "color": INK}},
-        gauge={"axis": {"range": [0, 100], "tickwidth": 0, "tickvals": [0, 35, 60, 100]},
+        gauge={"axis": {"range": [0, 100], "tickwidth": 0, "tickvals": [0, 30, 55, 100]},
                "bar": {"color": RISK_COLORS[lvl], "thickness": 0.35},
                "bgcolor": "white",
-               "steps": [{"range": [0, 35], "color": "#eaf6ea"},
-                         {"range": [35, 60], "color": "#fff5df"},
-                         {"range": [60, 100], "color": "#fbe9e9"}]}))
+               "steps": [{"range": [0, 30], "color": "#eaf6ea"},
+                         {"range": [30, 55], "color": "#fff5df"},
+                         {"range": [55, 100], "color": "#fbe9e9"}]}))
     fig.update_layout(height=230, margin=dict(l=35, r=40, t=30, b=10))
     return fig
 
